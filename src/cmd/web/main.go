@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"flag"
+	"github.com/go-playground/form/v4" // N
 	"html/template"
 	"log"
 	"net/http"
@@ -17,6 +18,7 @@ type application struct {
 	infoLog       *log.Logger
 	snippets      *models.SnippetModel
 	templateCache map[string]*template.Template
+	formDecoder   *form.Decoder
 }
 
 func main() {
@@ -38,11 +40,13 @@ func main() {
 	if err != nil {
 		errlog.Println(err)
 	}
+	formDecoder := form.NewDecoder()
 	app := &application{
 		errLog:        errlog,
 		infoLog:       infolog,
 		snippets:      &models.SnippetModel{DB: db},
 		templateCache: templateCache,
+		formDecoder:   formDecoder,
 	}
 	srv := &http.Server{
 		Addr:     *addr,
