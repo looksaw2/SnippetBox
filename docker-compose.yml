@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0  # 可以使用 5.7、8.0 等版本
+    container_name: mysql_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword  # root用户密码
+      MYSQL_DATABASE: mydatabase         # 自动创建的数据库
+      MYSQL_USER: myuser                 # 自动创建的用户
+      MYSQL_PASSWORD: mypassword         # 自动创建用户的密码
+      MYSQL_ROOT_HOST: '%'               # 允许root远程连接
+    ports:
+      - "3306:3306"                      # 主机端口:容器端口
+    volumes:
+      - mysql_data:/var/lib/mysql        # 数据持久化
+      - ./mysql/conf.d:/etc/mysql/conf.d  # 自定义配置
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql  # 初始化脚本
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  app_network:
+    driver: bridge
