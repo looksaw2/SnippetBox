@@ -1,11 +1,15 @@
 ### Test Home 
-GET http://localhost:8080/
+GET https://localhost:8080/
 
 ### Test Snippet View
-GET http://localhost:8080/snippet/view?id=1
+GET https://localhost:8080/snippet/view?id=1
 
 ### Test Snippet Create
-POST http://localhost:8080/snippet/create
+POST https://localhost:8080/snippet/create
 
 ### Test Snippet static source
-GET http://localhost:8080/static
+GET https://localhost:8080/static
+
+
+### Test user login
+GET https://localhost:8080/user/signup 
